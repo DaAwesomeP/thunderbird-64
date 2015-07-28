@@ -18,7 +18,7 @@ before_install:
 install:
 - wget "http://ftp.mozilla.org/pub/thunderbird/releases/`cat release`/source/thunderbird-`cat
   release`.source.tar.bz2"
-- tar xjvf "thunderbird-`cat release`.source.tar.bz2"
+- tar xjf "thunderbird-`cat release`.source.tar.bz2"
 - cd comm-*
 - python client.py checkout
 before_script:
