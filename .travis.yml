@@ -11,7 +11,6 @@ before_install:
 - echo "alias sudo='sudo '"  | sudo tee --append /root/.bashrc
 - alias add-apt-repository='add-apt-repository -y'
 - alias sudo='sudo '
-- sudo alias add-apt-repository='add-apt-repository -y'
 - wget -O bootstrap.py https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
   && sudo python bootstrap.py --application-choice desktop --no-interactive
 install:
