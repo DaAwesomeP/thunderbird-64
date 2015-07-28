@@ -6,8 +6,8 @@ before_install:
 - sudo apt-get update -y
 - sudo apt-get install -y zip sudo wget bzip2 tar -y --force-yes
 - sudo apt-get clean
+- echo "alias add-apt-repository='add-apt-repository -y'" >> ~/.bashrc
 - echo "alias add-apt-repository='add-apt-repository -y'"  | sudo tee --append /root/.bashrc
-- . .bashrc
 - wget -O bootstrap.py https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py
   && sudo python bootstrap.py --application-choice desktop --no-interactive
 install:
