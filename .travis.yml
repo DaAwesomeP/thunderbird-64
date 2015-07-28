@@ -20,7 +20,7 @@ install:
   release`.source.tar.bz2"
 - tar xjf "thunderbird-`cat release`.source.tar.bz2"
 - cd comm-*
-- python client.py checkout
+- python client.py checkout --skip-comm --skip-mozilla --skip-inspector --skip-ldap --skip-chatzilla --skip-venkman
 before_script:
 - echo 'ac_add_options --enable-application=mail' >> .mozconfig
 - echo 'ac_add_options --enable-application=calendar' >> .mozconfig
