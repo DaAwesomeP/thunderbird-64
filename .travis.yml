@@ -27,12 +27,17 @@ install:
 - python client.py checkout --skip-comm --skip-mozilla --skip-inspector --skip-ldap --skip-chatzilla --skip-venkman
 before_script:
 - echo 'ac_add_options --enable-application=mail' >> .mozconfig
-- echo 'ac_add_options --enable-application=calendar' >> .mozconfig
 - echo 'ac_add_options --enable-optimize' >> .mozconfig
+- echo 'ac_add_options --disable-debug' >> .mozconfig
+- echo 'ac_add_options --enable-tests' >> .mozconfig
+- echo 'ac_add_options --enable-jemalloc' >> .mozconfig
 - echo 'CONCURRENCY=$(( `grep processor /proc/cpuinfo | wc -l` + 2 ))' >> .mozconfig
 - echo 'mk_add_options MOZ_MAKE_FLAGS="-j$CONCURRENCY"' >> .mozconfig
 - echo 'ac_add_options --with-ccache=/usr/bin/ccache' >> .mozconfig
-script: "./mozilla/mach build"
+script:
+- ./mozilla/mach build
+- echo 'ac_add_options --enable-application=calendar' >> .mozconfig
+- ./mozilla/mach build
 after_script: ls
 deploy:
   provider: releases
