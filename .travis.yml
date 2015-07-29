@@ -9,6 +9,8 @@ before_install:
 - sudo apt-get update -y
 - sudo apt-get install -y zip sudo wget bzip2 tar gcc-4.7 -y --force-yes
 - sudo apt-get clean
+- sudo rm /usr/bin/gcc
+- sudo ln -s /usr/bin/gcc-4.7 /usr/bin/gcc
 - echo "alias add-apt-repository='add-apt-repository -y'" >> ~/.bashrc
 - echo "alias add-apt-repository='add-apt-repository -y'"  | sudo tee --append /root/.bashrc
 - echo "alias sudo='sudo '"  | sudo tee --append /root/.bashrc
