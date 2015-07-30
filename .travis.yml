@@ -1,3 +1,4 @@
+# DISABLED - Linux compiling isn't really needed since Mozilla does it for you
 language: python
 python:
 - '2.7'
@@ -31,6 +32,9 @@ before_script:
 - echo 'ac_add_options --disable-debug' >> .mozconfig
 - echo 'ac_add_options --enable-tests' >> .mozconfig
 - echo 'ac_add_options --enable-jemalloc' >> .mozconfig
+- echo 'ac_add_options --enable-release' >> .mozconfig
+- echo 'ac_add_options --disable-updater' >> .mozconfig
+- echo 'ac_add_options --disable-update-channel' >> .mozconfig
 - echo 'CONCURRENCY=$(( `grep processor /proc/cpuinfo | wc -l` + 2 ))' >> .mozconfig
 - echo 'mk_add_options MOZ_MAKE_FLAGS="-j$CONCURRENCY"' >> .mozconfig
 - echo 'ac_add_options --with-ccache=/usr/bin/ccache' >> .mozconfig

@@ -1,0 +1,125 @@
+﻿version: 1.0.{build}
+branches:
+  only:
+    - master
+  except:
+    - gh-pages
+skip_tags: false
+os: Windows Server 2012
+init:
+  - git config --global core.autocrlf input
+clone_folder: c:\thunderbird-src
+# fetch repository as zip archive
+shallow_clone: false                 # default is "false"
+clone_depth: 1                      # clone entire repository history if not defined
+
+# this is how to allow failing jobs in the matrix
+#matrix:
+#  fast_finish: true     # set this flag to immediately finish build once one of the jobs fails.
+#  allow_failures:
+#    - platform: x86
+#      configuration: Debug
+#    - platform: x64
+#      configuration: Release
+
+# build cache to preserve files/folders between builds
+cache:
+  - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - projectA\libs
+  - node_modules                    # local npm modules
+  - %APPDATA%\npm-cache             # npm cache
+
+# scripts that run after cloning repository
+install:
+#  - echo This is batch
+#  - ps: Write-Host 'This is PowerShell'
+#  - cmd: echo This is batch again
+  - cmd: curl -LO https://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/MozillaBuildSetup-Latest.exe
+  - cmd: MozillaBuildSetup-Latest.exe /S
+
+# enable patching of AssemblyInfo.* files
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "2.2.{build}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+platform: x64
+configuration: Release
+before_build:
+after_build:
+build_script:
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+test:
+  assemblies:
+    - asm1.dll
+    - asm2.dll
+
+  categories:
+    - UI
+    - E2E
+
+# to run tests from different categories as separate jobs in parallel
+#test:
+#  categories:
+#    - A            # A category common for all jobs
+#    - [UI]         # 1st job
+#    - [DAL, BL]    # 2nd job
+
+# scripts to run before tests
+before_test:
+  - echo script1
+  - ps: Write-Host "script1"
+
+# scripts to run after tests
+after_test:
+
+# to run your custom scripts instead of automatic tests
+test_script:
+  - echo This is my custom test script
+
+# to disable automatic tests 
+#test: off
+
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
+artifacts:
+
+  # pushing a single file
+  - path: test.zip
+
+  # pushing a single file with environment variable in path and "Deployment name" specified
+  - path: MyProject\bin\$(configuration)
+    name: myapp
+
+  # pushing entire folder as a zip archive
+  - path: logs
+
+  # pushing all *.nupkg files in directory
+  - path: out\*.nupkg
+
+deploy:
+  - provider: GitHub
+    artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
+    draft: false
+    prerelease: false
+    on:
+      branch: master                # release from master branch only
+      appveyor_repo_tag: true       # deploy on tag push only
+before_deploy:
+after_deploy:
+deploy_script:
+
+on_success:
+  - do something
+on_failure:
+  - do something
+on_finish:
+  - do something
