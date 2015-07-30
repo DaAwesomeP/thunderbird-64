@@ -34,15 +34,18 @@ install:
 #  - cmd: echo This is batch again
   - cmd: echo "Running install section"
   - cmd: chdir
-  - set /p RELEASEVERSION=<release
-  - echo %RELEASEVERSION%
+  - cmd:set /p RELEASEVERSION=<release
+  - ps: $RELEASEVERSION=<release
+  - cmd: echo %RELEASEVERSION%
 #  - cmd: curl -LO https://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/MozillaBuildSetup-Latest.exe
   - ps: Start-FileDownload 'https://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/MozillaBuildSetup-Latest.exe'
   - cmd: MozillaBuildSetup-Latest.exe /S
 #  - cmd: curl -LO http://ftp.mozilla.org/pub/thunderbird/releases/%RELEASEVERSION%/source/thunderbird-%RELEASEVERSION%.source.tar.bz2
-  - ps: Start-FileDownload 'http://ftp.mozilla.org/pub/thunderbird/releases/%RELEASEVERSION%/source/thunderbird-%RELEASEVERSION%.source.tar.bz2'
+  - ps: Start-FileDownload "http://ftp.mozilla.org/pub/thunderbird/releases/$RELEASEVERSION/source/thunderbird-$RELEASEVERSION.source.tar.bz2"
   - cmd: 7z e thunderbird-%RELEASEVERSION%.source.tar.bz2
   - cmd: 7z x thunderbird-%RELEASEVERSION%.source.tar
+  - cmd: cd comm-*
+  - cmd: python client.py checkout --skip-comm --skip-mozilla --skip-inspector --skip-ldap --skip-chatzilla --skip-venkman
 
 # enable patching of AssemblyInfo.* files
 #assembly_info:
